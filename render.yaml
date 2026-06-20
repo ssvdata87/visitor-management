@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: visitor-management
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn visitor_management.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: visitor-management-db
+          property: connectionString
+
+databases:
+  - name: visitor-management-db
+    plan: free
